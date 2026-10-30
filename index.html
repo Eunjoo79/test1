@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성인간호학 교실 | 간호학과 4학년 종합 임상실습 &amp; 국가고시 모듈</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for Visual Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Inter & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            700: '#102a43',
+                            800: '#0b69a3',
+                            900: '#003e6b',
+                            950: '#031b2e'
+                        },
+                        teal: {
+                            500: '#00a896',
+                            600: '#028090',
+                            700: '#05668d'
+                        },
+                        medical: {
+                            red: '#e63946',
+                            amber: '#f4a261',
+                            green: '#2a9d8f',
+                            bg: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .tab-active {
+            border-bottom: 3px solid #006699;
+            color: #004080;
+            font-weight: 700;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Brand Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-teal-500 flex items-center justify-center text-white font-bold text-xl shadow-inner">
+                        <i class="fa-solid fa-user-nurse"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-teal-300 font-semibold tracking-widest block uppercase">Department of Adult Health Nursing</span>
+                        <h1 class="text-lg font-bold leading-none text-white">성인간호학 교실 <span class="text-xs font-normal text-slate-300 bg-slate-800 px-2 py-0.5 rounded ml-2">4학년 임상실습 &amp; 심화과정</span></h1>
+                    </div>
+                </div>
+
+                <!-- Right Quick Info -->
+                <div class="hidden md:flex items-center space-x-6 text-sm">
+                    <div class="flex items-center space-x-2 text-slate-300">
+                        <i class="fa-regular fa-clock text-teal-400"></i>
+                        <span>제65회 간호사 국가고시: <strong id="ddayText" class="text-amber-400 font-bold">D-78</strong></span>
+                    </div>
+                    <div class="h-4 w-[1px] bg-slate-700"></div>
+                    <div class="flex items-center space-x-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-slate-300 text-xs">2026-2학기 임상시뮬레이션 모듈 활성화</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secondary Navigation Bar -->
+        <nav class="bg-white border-b border-slate-200 text-slate-700 text-sm overflow-x-auto custom-scrollbar">
+            <div class="max-w-7xl mx-auto px-4 flex space-x-8">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="py-3 px-1 flex items-center space-x-2 border-b-2 border-transparent hover:text-navy-900 transition tab-active">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>종합 대시보드</span>
+                </button>
+                <button onclick="switchTab('cases')" id="nav-cases" class="py-3 px-1 flex items-center space-x-2 border-b-2 border-transparent hover:text-navy-900 transition">
+                    <i class="fa-solid fa-notes-medical"></i>
+                    <span>임상사례 &amp; NANDA/SBAR</span>
+                </button>
+                <button onclick="switchTab('calculator')" id="nav-calculator" class="py-3 px-1 flex items-center space-x-2 border-b-2 border-transparent hover:text-navy-900 transition">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>ABG &amp; 약물 계산기</span>
+                </button>
+                <button onclick="switchTab('skills')" id="nav-skills" class="py-3 px-1 flex items-center space-x-2 border-b-2 border-transparent hover:text-navy-900 transition">
+                    <i class="fa-solid fa-stethoscope"></i>
+                    <span>핵심간호술기 &amp; ICU 모듈</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="nav-quiz" class="py-3 px-1 flex items-center space-x-2 border-b-2 border-transparent hover:text-navy-900 transition">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>국가고시 문제은행 &amp; EBP</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <section id="tab-dashboard" class="space-y-6">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-navy-900 to-teal-700 text-white rounded-2xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl space-y-3">
+                    <span class="bg-teal-500/30 text-teal-200 border border-teal-400/30 text-xs px-3 py-1 rounded-full font-semibold">Evidence-Based Clinical Nursing</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold leading-tight">근거기반간호(EBP)와 임상적 추론(Clinical Reasoning) 역량 강화</h2>
+                    <p class="text-slate-200 text-sm md:text-base">
+                        성인간호학 4학년 과정은 복합 질환을 가진 환자의 종합적 간호사정, 중환자 모니터링, 응급처치, SBAR 의사소통 및 국가고시 합격을 위한 핵심 역량을 다둡니다.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('cases')" class="bg-teal-500 hover:bg-teal-600 text-white font-medium px-4 py-2 rounded-lg text-sm shadow transition flex items-center space-x-2">
+                            <i class="fa-solid fa-play"></i>
+                            <span>임상 시뮬레이션 시작</span>
+                        </button>
+                        <button onclick="switchTab('calculator')" class="bg-slate-800/80 hover:bg-slate-800 text-slate-100 border border-slate-600 font-medium px-4 py-2 rounded-lg text-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-flask"></i>
+                            <span>ABG / IV 계산기 활용</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-white pointer-events-none">
+                    <i class="fa-solid fa-heart-pulse text-[240px]"></i>
+                </div>
+            </div>
+
+            <!-- Quick Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-vial"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase">ABG 판독 마스터</span>
+                        <p class="text-lg font-bold text-slate-800">동맥혈가스분석</p>
+                        <span class="text-xs text-blue-600 font-medium">산-염기 평형 계산 모듈</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-file-waveform"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase">ECG &amp; 중환자 모니터링</span>
+                        <p class="text-lg font-bold text-slate-800">심전도 리듬 판독</p>
+                        <span class="text-xs text-emerald-600 font-medium">VT, VF, AFib, STEMI 특강</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase">인계 표준화</span>
+                        <p class="text-lg font-bold text-slate-800">SBAR 의사소통</p>
+                        <span class="text-xs text-amber-600 font-medium">의사 보고 &amp; 인계 훈련</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase">국가고시 대비</span>
+                        <p class="text-lg font-bold text-slate-800">성인간호 8대 계통</p>
+                        <span class="text-xs text-rose-600 font-medium">문제풀이 &amp; 해설 포함</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Main Grid: Today's Pearl & System Summary -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left 2 Columns: System Key Checklist -->
+                <div class="lg:col-col-span-2 lg:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-layer-group text-teal-600"></i>
+                            <span>성인간호학 4학년 계통별 심화 학습 핵심</span>
+                        </h3>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">2026 학년도 최신 가이드라인</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <!-- Cardiovascular -->
+                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-teal-500 transition">
+                            <div class="flex items-center justify-between font-bold text-slate-800 mb-2">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-heart-pulse text-rose-500"></i>
+                                    <span>순환기계 (Cardiovascular)</span>
+                                </span>
+                                <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">국시 출제 1위</span>
+                            </div>
+                            <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                                <li>급성 심근경색증(AMI) 골든타임 간호 (MONA 프로토콜)</li>
+                                <li>심부전(Heart Failure) 수분제한 및 이뇨제 투여 사정</li>
+                                <li>중심정맥압(CVP) 측정 및 전부하(Preload) 평가</li>
+                            </ul>
+                        </div>
+
+                        <!-- Respiratory -->
+                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-teal-500 transition">
+                            <div class="flex items-center justify-between font-bold text-slate-800 mb-2">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-lungs text-sky-500"></i>
+                                    <span>호흡기계 (Respiratory)</span>
+                                </span>
+                                <span class="text-xs bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full">중환자 핵심</span>
+                            </div>
+                            <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                                <li>급성 호흡곤란 증후군(ARDS) PEEP 설정 및 Prone position</li>
+                                <li>인공호흡기(Ventilator) 알람 대응 및 VAP 예방 묶음(Bundle)</li>
+                                <li>밀폐흉관유도(Chest Tube) 발관 및 배액병 간호사정</li>
+                            </ul>
+                        </div>
+
+                        <!-- Neurological -->
+                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-teal-500 transition">
+                            <div class="flex items-center justify-between font-bold text-slate-800 mb-2">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-brain text-purple-500"></i>
+                                    <span>신경계 (Neurological)</span>
+                                </span>
+                                <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">임상 사정</span>
+                            </div>
+                            <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                                <li>GCS (Glasgow Coma Scale) 사정 및 동공반사 측정</li>
+                                <li>뇌고혈압(IICP) 삼징후(Cushing's Triad)와 머리상체상승(30°)</li>
+                                <li>급성 뇌졸중(Stroke) tPA 투여 적응증 및 혈압 관리</li>
+                            </ul>
+                        </div>
+
+                        <!-- Endocrine & Renal -->
+                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-teal-500 transition">
+                            <div class="flex items-center justify-between font-bold text-slate-800 mb-2">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-filter text-amber-500"></i>
+                                    <span>내분비 &amp; 신장계 (Endocrine/Renal)</span>
+                                </span>
+                                <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">전해질 응급</span>
+                            </div>
+                            <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                                <li>당뇨병성 케톤산증(DKA) 수액 보충 및 RI 지속 정맥 투여</li>
+                                <li>고칼륨혈증(Hyperkalemia) 긴급 처치 (RI+Glucose, Kayexalate)</li>
+                                <li>급성 신손상(AKI) 소변량 모니터링 (Oliguria 사정)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 1 Column: Clinical Pearl & Notice -->
+                <div class="space-y-6">
+                    <!-- Today's Clinical Pearl Card -->
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-6 rounded-xl shadow-sm relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs bg-black/20 px-2 py-1 rounded font-semibold uppercase tracking-wider">Today's Clinical Pearl</span>
+                            <i class="fa-solid fa-lightbulb text-yellow-200 text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">Digoxin(강심제) 투약 전 필수 간호사정</h4>
+                        <p class="text-xs text-amber-100 leading-relaxed mb-3">
+                            투약 전 반드시 <strong>심첨맥박(Apical pulse)을 1분간 측정</strong>하며, 60회/분 이하(서맥) 시 투약을 보류하고 의사에게 보고합니다. 또한 <strong>저칼륨혈증(Hypokalemia)</strong> 상태에서는 Digoxin 중독(Toxicity) 위험이 급격히 증가합니다.
+                        </p>
+                        <div class="text-[11px] bg-black/20 p-2 rounded text-amber-50">
+                            <strong>주요 중독 증상:</strong> 시야 장애(노란색으로 보임/Yellow Vision), 오심·구토, 부정맥.
+                        </div>
+                    </div>
+
+                    <!-- Clinical Tip Quick Accordion -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                        <h4 class="text-sm font-bold text-slate-800 border-b pb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
+                            <span>고위험 약물(High-Alert Meds) 안전수칙</span>
+                        </h4>
+                        <div class="text-xs space-y-2 text-slate-600">
+                            <div class="p-2 bg-rose-50 rounded border-l-4 border-rose-500">
+                                <strong>KCl (Potassium Chloride):</strong> 절대로 IV Direct Push 금지! 반드시 믹스 후 점적 정맥 주사.
+                            </div>
+                            <div class="p-2 bg-amber-50 rounded border-l-4 border-amber-500">
+                                <strong>Insulin (RI):</strong> 정맥 주입 시 오직 Regular Insulin만 사용 가능 (NPH/Lantus 주입 불가).
+                            </div>
+                            <div class="p-2 bg-blue-50 rounded border-l-4 border-blue-500">
+                                <strong>Heparin:</strong> aPTT 수치 모니터링 필수. 길항제는 Protamine Sulfate 준비.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 2: CLINICAL CASES & SBAR / NANDA ================= -->
+        <section id="tab-cases" class="hidden space-y-6">
+            <!-- Section Header -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
+                        <i class="fa-solid fa-notes-medical text-teal-600"></i>
+                        <span>임상 사례 분석 &amp; SBAR 인계 시뮬레이터</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">
+                        4학년 실습 과정에 맞춰 환자 시나리오를 바탕으로 주관적/객관적 자료 분석, NANDA 간호진단 도출 및 SBAR 보고서를 작성해보세요.
+                    </p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="loadCase(1)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-semibold rounded text-slate-700 transition">사례 1: AMI (급성심근경색)</button>
+                    <button onclick="loadCase(2)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs font-semibold rounded text-slate-700 transition">사례 2: ARDS (호흡부전)</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Case Scenario Card -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <span id="caseBadge" class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-full">중환자 응급 시나리오</span>
+                        <span class="text-xs text-slate-400">환자 ID: PT-2026-089</span>
+                    </div>
+
+                    <div id="caseContent" class="space-y-3 text-xs text-slate-700 leading-relaxed">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+                        <h4 class="font-bold text-xs text-slate-800 flex items-center space-x-1">
+                            <i class="fa-solid fa-microscope text-teal-600"></i>
+                            <span>사정 데이터 요약 (Assessment Data)</span>
+                        </h4>
+                        <div id="caseLabs" class="grid grid-cols-2 gap-2 text-[11px] text-slate-600">
+                            <!-- Labs dynamically loaded -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive NANDA & SBAR Workspace -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- NANDA Process Interactive Tool -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="font-bold text-sm text-slate-800 border-b pb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-list-check text-teal-600"></i>
+                            <span>1. NANDA 간호과정 도출 (Clinical Reasoning)</span>
+                        </h3>
+
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">우선순위 간호진단 선택 (Nursing Diagnosis)</label>
+                                <select id="nandaSelect" onchange="evaluateNanda()" class="w-full p-2.5 border rounded-lg bg-slate-50 text-slate-800 focus:ring-2 focus:ring-teal-500 outline-none">
+                                    <option value="">-- 간호진단을 선택하세요 --</option>
+                                    <option value="diag1">심근 허혈과 관련된 급성 통증 (Acute Pain)</option>
+                                    <option value="diag2">폐포-모세혈관 막 변화와 관련된 가스교환장애 (Impaired Gas Exchange)</option>
+                                    <option value="diag3">심근 수축력 감소와 관련된 심출량 감소 (Decreased Cardiac Output)</option>
+                                    <option value="diag4">지식 부족과 관련된 불안 (Anxiety)</option>
+                                </select>
+                            </div>
+
+                            <div id="nandaFeedback" class="hidden p-3 rounded-lg text-xs font-medium"></div>
+
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">근거기반 간호중재 및 이론적 근거 (Intervention &amp; Rationale)</label>
+                                <textarea id="nandaRationale" rows="3" placeholder="선택한 간호진단에 따른 중재(예: 산소 공급, NTG 설하투여, 모니터링 등)와 이론적 근거를 작성해보세요..." class="w-full p-2.5 border rounded-lg bg-slate-50 focus:ring-2 focus:ring-teal-500 outline-none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SBAR Generator Card -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <h3 class="font-bold text-sm text-slate-800 flex items-center space-x-2">
+                                <i class="fa-solid fa-headset text-indigo-600"></i>
+                                <span>2. SBAR 표준화 의사소통 인계 작성기</span>
+                            </h3>
+                            <button onclick="generateSBAR()" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded font-medium transition">
+                                SBAR 스크립트 생성
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div>
+                                <span class="font-bold text-slate-700 block mb-1">Situation (상황)</span>
+                                <input id="sbarS" type="text" placeholder="예: OO병원 OO과 4학년 실습생 OOO입니다. 501호 김OO 환자 흉통 호소..." class="w-full p-2 border rounded bg-slate-50">
+                            </div>
+                            <div>
+                                <span class="font-bold text-slate-700 block mb-1">Background (배경)</span>
+                                <input id="sbarB" type="text" placeholder="예: HTN, DM 기저질환자로 금일 AM 9시 STEMI 진단 하 입원..." class="w-full p-2 border rounded bg-slate-50">
+                            </div>
+                            <div>
+                                <span class="font-bold text-slate-700 block mb-1">Assessment (사정)</span>
+                                <input id="sbarA" type="text" placeholder="예: 현재 BP 150/90, HR 105, SpO2 91%. NRS 8점의 쥐어짜는 듯한 통증..." class="w-full p-2 border rounded bg-slate-50">
+                            </div>
+                            <div>
+                                <span class="font-bold text-slate-700 block mb-1">Recommendation (제안)</span>
+                                <input id="sbarR" type="text" placeholder="예: NTG 설하정 처방 검토 및 12-Lead EKG 재측정이 필요합니다." class="w-full p-2 border rounded bg-slate-50">
+                            </div>
+                        </div>
+
+                        <!-- Generated Output -->
+                        <div id="sbarResultContainer" class="hidden p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-xs space-y-2">
+                            <div class="flex justify-between font-bold text-indigo-900">
+                                <span>완성된 SBAR 구두 보고 스크립트</span>
+                                <button onclick="copySbar()" class="text-indigo-600 hover:underline"><i class="fa-regular fa-copy"></i> 복사하기</button>
+                            </div>
+                            <p id="sbarOutputText" class="text-slate-700 leading-relaxed font-mono whitespace-pre-line"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 3: ABG & CLINICAL CALCULATORS ================= -->
+        <section id="tab-calculator" class="hidden space-y-6">
+            <!-- Header -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
+                    <i class="fa-solid fa-flask text-teal-600"></i>
+                    <span>동맥혈가스분석(ABG) 판독 &amp; 임상 약물 용량 계산기</span>
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">
+                    임상 중환자실 및 응급실에서 빈번하게 사용되는 ABG 자동 판독 로직과 gtt/min 및 cc/hr 주입 속도 계산 모듈입니다.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- ABG Analyzer Module -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="border-b pb-3 flex justify-between items-center">
+                        <h3 class="font-bold text-base text-slate-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-vial-circle-check text-sky-600"></i>
+                            <span>1. ABG (Arterial Blood Gas) 자동 판독기</span>
+                        </h3>
+                        <span class="text-xs text-slate-400">정상치: pH 7.35-7.45 / PaCO2 35-45 / HCO3 22-26</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">pH</label>
+                            <input id="abgPh" type="number" step="0.01" value="7.28" class="w-full p-2 border rounded-lg bg-slate-50 text-center font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">PaCO2 (mmHg)</label>
+                            <input id="abgPaco2" type="number" step="1" value="52" class="w-full p-2 border rounded-lg bg-slate-50 text-center font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">HCO3- (mEq/L)</label>
+                            <input id="abgHco3" type="number" step="1" value="24" class="w-full p-2 border rounded-lg bg-slate-50 text-center font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">PaO2 (mmHg)</label>
+                            <input id="abgPao2" type="number" step="1" value="75" class="w-full p-2 border rounded-lg bg-slate-50 text-center font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                    </div>
+
+                    <button onclick="analyzeABG()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg text-xs transition shadow">
+                        ABG 정밀 판독 실행
+                    </button>
+
+                    <!-- Result Box -->
+                    <div id="abgResult" class="p-4 rounded-xl border bg-slate-50 space-y-2 text-xs">
+                        <div class="font-bold text-slate-700 flex justify-between">
+                            <span>판독 결과:</span>
+                            <span id="abgDiagnosis" class="text-rose-600 font-extrabold text-sm">결과 대기 중</span>
+                        </div>
+                        <p id="abgCompensation" class="text-slate-600">보상 작용 상태: -</p>
+                        <p id="abgOxygenation" class="text-slate-600">산소화 평가: -</p>
+                        <div id="abgNursingIntervention" class="pt-2 border-t text-slate-700 text-[11px] leading-relaxed">
+                            <strong>추천 간호중재:</strong> 데이터를 입력하고 판독 버튼을 누르세요.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IV Infusion Rate & Dosage Calculator -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="border-b pb-3 flex justify-between items-center">
+                        <h3 class="font-bold text-base text-slate-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-calculator text-emerald-600"></i>
+                            <span>2. IV 점적수(gtt/min) &amp; 주입속도(cc/hr) 계산기</span>
+                        </h3>
+                    </div>
+
+                    <div class="space-y-4 text-xs">
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">총 주입량 (mL)</label>
+                                <input id="ivVol" type="number" value="1000" class="w-full p-2 border rounded-lg bg-slate-50 text-center font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">주입 시간 (시간)</label>
+                                <input id="ivTime" type="number" value="8" class="w-full p-2 border rounded-lg bg-slate-50 text-center font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">수액세트 점적수</label>
+                                <select id="ivDropFactor" class="w-full p-2 border rounded-lg bg-slate-50 font-bold">
+                                    <option value="20">20 gtt/mL (일반 세트)</option>
+                                    <option value="15">15 gtt/mL</option>
+                                    <option value="60">60 gtt/mL (Micro 세트)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="calculateIV()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition shadow">
+                            주입 속도 계산
+                        </button>
+
+                        <div id="ivResultBox" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2 text-xs">
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white p-3 rounded-lg border border-emerald-100">
+                                    <span class="text-slate-500 block text-[11px]">시간당 주입량 (cc/hr)</span>
+                                    <span id="resCchr" class="text-xl font-extrabold text-emerald-700">125 cc/hr</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-emerald-100">
+                                    <span class="text-slate-500 block text-[11px]">분당 방울수 (gtt/min)</span>
+                                    <span id="resGtt" class="text-xl font-extrabold text-emerald-700">42 gtt/min</span>
+                                </div>
+                            </div>
+                            <p id="resDropSec" class="text-center text-slate-600 font-medium text-[11px] pt-1">
+                                (약 1.4 초당 1방울 떨어짐)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab Reference Matrix -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="font-bold text-base text-slate-800 border-b pb-2 flex items-center space-x-2">
+                    <i class="fa-solid fa-table text-indigo-600"></i>
+                    <span>주요 임상 혈액 검사치 정상범위 &amp; 파닉 수치 (Panic Value) Matrix</span>
+                </h3>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold border-b">
+                                <th class="p-2.5">검사 항목 (Lab Test)</th>
+                                <th class="p-2.5">정상 참고치 (Reference Range)</th>
+                                <th class="p-2.5">임상적 의의 (Clinical Significance)</th>
+                                <th class="p-2.5">긴급 보고 수치 (Panic/Critical Value)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-600">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2.5 font-bold text-slate-800">Troponin I / T</td>
+                                <td class="p-2.5">TnI &lt; 0.04 ng/mL</td>
+                                <td class="p-2.5">급성 심근경색(AMI)의 가장 특이도 높은 심근 손상 마커</td>
+                                <td class="p-2.5 font-bold text-rose-600">&gt; 0.4 ng/mL (급성 심근손상)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2.5 font-bold text-slate-800">Serum Potassium (K+)</td>
+                                <td class="p-2.5">3.5 ~ 5.0 mEq/L</td>
+                                <td class="p-2.5">심근 전도계 및 근육 자극 유지를 담당하는 핵심 전해질</td>
+                                <td class="p-2.5 font-bold text-rose-600">&lt; 2.8 또는 &gt; 6.0 mEq/L (치사성 부정맥 유발)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2.5 font-bold text-slate-800">BUN / Serum Creatinine</td>
+                                <td class="p-2.5">BUN: 10-20 mg/dL / Cr: 0.6-1.2 mg/dL</td>
+                                <td class="p-2.5">신장 기능 및 사구체 여과율(GFR) 사정 지표</td>
+                                <td class="p-2.5 font-bold text-rose-600">Cr &gt; 3.0 mg/dL (급성 신손상 AKI 가능성)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-2.5 font-bold text-slate-800">aPTT (Heparin 모니터링)</td>
+                                <td class="p-2.5">25 ~ 35 초 (치료 목표: 정상치의 1.5~2.5배)</td>
+                                <td class="p-2.5">헤파린 투여 시 혈액 응고 시간 지표</td>
+                                <td class="p-2.5 font-bold text-rose-600">&gt; 100 초 (심각한 출혈 위험)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 4: CORE SKILLS & ICU SIMULATION ================= -->
+        <section id="tab-skills" class="hidden space-y-6">
+            <!-- Header -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
+                    <i class="fa-solid fa-stethoscope text-teal-600"></i>
+                    <span>핵심기본간호술기 &amp; 중환자 심화 프로토콜</span>
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">
+                    간호교육인증평가 기준 핵심술기와 중환자실(ICU) 및 응급실(ER) 특수 간호 절차의 근거기반 수행 단계입니다.
+                </p>
+            </div>
+
+            <!-- Skills Accordion List -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Skill Selection Panel -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <h3 class="font-bold text-xs text-slate-400 uppercase tracking-wider mb-2">실습 술기 목록</h3>
+                    
+                    <button onclick="selectSkill('vent')" id="skillBtn-vent" class="w-full text-left p-3 rounded-lg border text-xs font-bold transition flex items-center justify-between bg-teal-50 border-teal-500 text-teal-800">
+                        <span>1. 인공호흡기(Ventilator) 모니터링 &amp; Suction</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                    <button onclick="selectSkill('cvp')" id="skillBtn-cvp" class="w-full text-left p-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center justify-between">
+                        <span>2. 중심정맥관(CVC) 관리 및 CVP 측정</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                    <button onclick="selectSkill('chest')" id="skillBtn-chest" class="w-full text-left p-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center justify-between">
+                        <span>3. 밀폐흉관유도(Chest Drain) 배액관 간호</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                    <button onclick="selectSkill('trans')" id="skillBtn-trans" class="w-full text-left p-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center justify-between">
+                        <span>4. 수혈간호 (Blood Transfusion Protocol)</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Skill Detail Procedure View -->
+                <div class="md:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div id="skillTitleBox" class="border-b pb-3 flex justify-between items-center">
+                        <h3 id="skillDetailTitle" class="font-bold text-lg text-slate-800">인공호흡기(Ventilator) 모니터링 &amp; 기관내 흡인(Suction)</h3>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded">수행시간: 약 10분</span>
+                    </div>
+
+                    <div id="skillSteps" class="space-y-3 text-xs text-slate-700">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 5: NATIONAL BOARD EXAM DRILL ================= -->
+        <section id="tab-quiz" class="hidden space-y-6">
+            <!-- Header -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
+                        <i class="fa-solid fa-graduation-cap text-teal-600"></i>
+                        <span>간호사 국가고시 성인간호학 모의고사 &amp; EBP 해설</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">
+                        최신 국시 출제 경향을 반영한 고난도 심화 문제와 근거기반 해설을 통해 임상적 추론력을 평가합니다.
+                    </p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 block">현재 점수</span>
+                    <span id="quizScoreText" class="text-xl font-extrabold text-teal-600">0 / 3</span>
+                </div>
+            </div>
+
+            <!-- Quiz Card Container -->
+            <div id="quizContainer" class="space-y-6">
+                <!-- Dynamically rendered quiz questions -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-teal-600 rounded flex items-center justify-center text-white font-bold">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-slate-200">성인간호학 교실 (Department of Adult Health Nursing)</p>
+                    <p class="text-[11px] text-slate-500">College of Nursing &bull; Nursing Education &amp; Clinical Excellence</p>
+                </div>
+            </div>
+            <p class="text-center md:text-right text-slate-500">
+                본 모듈은 간호학과 4학년 종합 임상실습 및 국가고시 대비를 위해 제작된 학습용 리소스입니다.
+            </p>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript Interactive Logic -->
+    <script>
+        // ================= TAB SWITCHING LOGIC =================
+        function switchTab(tabId) {
+            const tabs = ['dashboard', 'cases', 'calculator', 'skills', 'quiz'];
+            tabs.forEach(id => {
+                const element = document.getElementById(`tab-${id}`);
+                const navBtn = document.getElementById(`nav-${id}`);
+                if (id === tabId) {
+                    element.classList.remove('hidden');
+                    navBtn.classList.add('tab-active');
+                } else {
+                    element.classList.add('hidden');
+                    navBtn.classList.remove('tab-active');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ================= CLINICAL CASES DATA & LOGIC =================
+        const casesData = {
+            1: {
+                badge: "순환기계 응급 사례",
+                content: `
+                    <p><strong>환자:</strong> 김OO (남성, 58세)</p>
+                    <p><strong>주소 (C.C):</strong> "가슴을 쥐어짜는 듯한 극심한 통증이 왼쪽 어깨로 뻗쳐요."</p>
+                    <p><strong>현병력:</strong> 내원 2시간 전부터 발생한 흉골 하부의 가슴 압박통(NRS 9점). 휴식과 관계없이 통증 지속됨. 식은땀(Diaphoresis)과 오심 호소.</p>
+                    <p><strong>활력징후:</strong> BP 155/95 mmHg, HR 108회/분, RR 24회/분, BT 36.8℃, SpO2 92% (Room air).</p>
+                `,
+                labs: `
+                    <div>&bull; Troponin-I: 2.8 ng/mL (&uarr;)</div>
+                    <div>&bull; CK-MB: 18.5 ng/mL (&uarr;)</div>
+                    <div>&bull; 12-Lead ECG: V1~V4 ST절 상승 (STEMI)</div>
+                    <div>&bull; NT-proBNP: 450 pg/mL</div>
+                `,
+                correctDiag: "diag1",
+                explanation: "12-Lead 심전도 상 ST절 상승과 심근 효소치(Troponin-I) 상승, 전형적인 방사통이 관찰되므로 최우선 간호진단은 '심근 허혈과 관련된 급성 통증'입니다."
+            },
+            2: {
+                badge: "호흡기계 중환자 사례",
+                content: `
+                    <p><strong>환자:</strong> 박OO (여성, 64세)</p>
+                    <p><strong>주소 (C.C):</strong> Severe Dyspnea &amp; Tachypnea (극심한 호흡곤란 및 빈호흡)</p>
+                    <p><strong>현병력:</strong> 폐렴(Pneumonia)으로 입원 치료 중, 금일 오전부터 빈호흡(RR 34회/분) 및 청색증 관찰됨. O2 15L/min Reserve mask 적용 중이나 SpO2 84% 유지.</p>
+                    <p><strong>흉부 X-ray:</strong> 양측 폐 전반의 침윤 소견 (Bilateral diffuse infiltrates / Ground-glass opacity).</p>
+                `,
+                labs: `
+                    <div>&bull; ABG: pH 7.28, PaCO2 48, PaO2 52</div>
+                    <div>&bull; PaO2 / FiO2 Ratio: 115 mmHg (급성 ARDS)</div>
+                    <div>&bull; WBC: 18,500 /mm³ (&uarr;)</div>
+                    <div>&bull; Lactate: 3.4 mmol/L (&uarr;)</div>
+                `,
+                correctDiag: "diag2",
+                explanation: "PaO2/FiO2 비율이 100~200 mmHg 사이로 중등도 급성 호흡곤란 증후군(ARDS) 소견이며, 산소 공급에도 저산소혈증이 개선되지 않으므로 '가스교환장애'가 최우선 간호진단입니다."
+            }
+        };
+
+        let currentCase = 1;
+
+        function loadCase(caseId) {
+            currentCase = caseId;
+            const data = casesData[caseId];
+            document.getElementById('caseBadge').innerText = data.badge;
+            document.getElementById('caseContent').innerHTML = data.content;
+            document.getElementById('caseLabs').innerHTML = data.labs;
+            document.getElementById('nandaSelect').value = "";
+            document.getElementById('nandaFeedback').classList.add('hidden');
+        }
+
+        function evaluateNanda() {
+            const selected = document.getElementById('nandaSelect').value;
+            const feedback = document.getElementById('nandaFeedback');
+            const data = casesData[currentCase];
+
+            if (!selected) {
+                feedback.classList.add('hidden');
+                return;
+            }
+
+            feedback.classList.remove('hidden');
+            if (selected === data.correctDiag) {
+                feedback.className = "p-3 rounded-lg text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-300";
+                feedback.innerHTML = `<strong><i class="fa-solid fa-circle-check"></i> 정확한 임상적 판단입니다!</strong><br>${data.explanation}`;
+            } else {
+                feedback.className = "p-3 rounded-lg text-xs font-medium bg-rose-100 text-rose-800 border border-rose-300";
+                feedback.innerHTML = `<strong><i class="fa-solid fa-circle-xmark"></i> 다시 고려해보세요.</strong><br>환자의 현재 가장 위급한 생명 징후(Vital Signs) 및 검사 결과를 재사정해보세요.`;
+            }
+        }
+
+        function generateSBAR() {
+            const s = document.getElementById('sbarS').value || "(Situation 내용 미입력)";
+            const b = document.getElementById('sbarB').value || "(Background 내용 미입력)";
+            const a = document.getElementById('sbarA').value || "(Assessment 내용 미입력)";
+            const r = document.getElementById('sbarR').value || "(Recommendation 내용 미입력)";
+
+            const output = `[S - Situation]\n${s}\n\n[B - Background]\n${b}\n\n[A - Assessment]\n${a}\n\n[R - Recommendation]\n${r}`;
+            
+            document.getElementById('sbarOutputText').innerText = output;
+            document.getElementById('sbarResultContainer').classList.remove('hidden');
+        }
+
+        function copySbar() {
+            const text = document.getElementById('sbarOutputText').innerText;
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            alert('SBAR 스크립트가 클립보드에 복사되었습니다.');
+        }
+
+
+        // ================= ABG CALCULATOR LOGIC =================
+        function analyzeABG() {
+            const ph = parseFloat(document.getElementById('abgPh').value);
+            const paco2 = parseFloat(document.getElementById('abgPaco2').value);
+            const hco3 = parseFloat(document.getElementById('abgHco3').value);
+            const pao2 = parseFloat(document.getElementById('abgPao2').value);
+
+            let diagnosis = "";
+            let compensation = "";
+            let oxygenation = "";
+            let intervention = "";
+
+            // 1. Primary Acid-Base Status
+            if (ph < 7.35) {
+                // Acidemia
+                if (paco2 > 45 && hco3 < 22) {
+                    diagnosis = "혼합성 산증 (Mixed Respiratory & Metabolic Acidosis)";
+                    compensation = "보상 작용 없음 (두 계통 모두 산증 유발)";
+                } else if (paco2 > 45) {
+                    diagnosis = "호흡성 산증 (Respiratory Acidosis)";
+                    if (hco3 > 26) compensation = "부분 보상형 (Partially Compensated)";
+                    else compensation = "비보상형 (Uncompensated)";
+                } else if (hco3 < 22) {
+                    diagnosis = "대사성 산증 (Metabolic Acidosis)";
+                    if (paco2 < 35) compensation = "부분 보상형 (Partially Compensated - 쿠스마울 호흡 관찰)";
+                    else compensation = "비보상형 (Uncompensated)";
+                } else {
+                    diagnosis = "산증 (Acidemia - 세부 평가 필요)";
+                }
+            } else if (ph > 7.45) {
+                // Alkalemia
+                if (paco2 < 35 && hco3 > 26) {
+                    diagnosis = "혼합성 염기증 (Mixed Alkalosis)";
+                } else if (paco2 < 35) {
+                    diagnosis = "호흡성 염기증 (Respiratory Alkalosis)";
+                    if (hco3 < 22) compensation = "부분 보상형 (Partially Compensated)";
+                    else compensation = "비보상형 (Uncompensated)";
+                } else if (hco3 > 26) {
+                    diagnosis = "대사성 염기증 (Metabolic Alkalosis)";
+                    if (paco2 > 45) compensation = "부분 보상형 (Partially Compensated)";
+                    else compensation = "비보상형 (Uncompensated)";
+                }
+            } else {
+                // Normal pH (7.35 - 7.45)
+                if (paco2 > 45 && hco3 > 26) {
+                    diagnosis = ph < 7.40 ? "완전 보상된 호흡성 산증" : "완전 보상된 대사성 염기증";
+                    compensation = "완전 보상형 (Fully Compensated)";
+                } else if (paco2 < 35 && hco3 < 22) {
+                    diagnosis = ph < 7.40 ? "완전 보상된 대사성 산증" : "완전 보상된 호흡성 염기증";
+                    compensation = "완전 보상형 (Fully Compensated)";
+                } else {
+                    diagnosis = "정상 산-염기 평형 (Normal Acid-Base Balance)";
+                    compensation = "정상 범위";
+                }
+            }
+
+            // Oxygenation Status
+            if (pao2 < 60) oxygenation = "심각한 저산소혈증 (Severe Hypoxemia) - 긴급 산소 공급 및 인공호흡기 고려";
+            else if (pao2 < 80) oxygenation = "경도~중등도 저산소혈증 (Hypoxemia)";
+            else oxygenation = "정상 산소화 상태 (Normal Oxygenation)";
+
+            // Interventions
+            if (diagnosis.includes("호흡성 산증")) {
+                intervention = "<strong>간호중재:</strong> 기도 개방성 유지, 분비물 흡인(Suction), 호흡기 자극, 필요 시 인공호흡기(Ventilator) 일회 호흡량(Vt) 증대 고려.";
+            } else if (diagnosis.includes("대사성 산증")) {
+                intervention = "<strong>간호중재:</strong> 신장 기능 및 원인 질환(DKA, 신부전) 치료, Sodium Bicarbonate 투여 처방 확인, 전해질(K+) 모니터링.";
+            } else if (diagnosis.includes("호흡성 염기증")) {
+                intervention = "<strong>간호중재:</strong> 과다호흡(Hyperventilation) 원인 재사정, 불안 완화 간호, 재호흡 주머니(Paper bag) 적용 검토.";
+            } else {
+                intervention = "<strong>간호중재:</strong> 정기적 ABG 모니터링 및 임상 상태 재사정.";
+            }
+
+            document.getElementById('abgDiagnosis').innerText = diagnosis;
+            document.getElementById('abgCompensation').innerText = "보상 작용: " + compensation;
+            document.getElementById('abgOxygenation').innerText = "산소화 지수: " + oxygenation;
+            document.getElementById('abgNursingIntervention').innerHTML = intervention;
+        }
+
+        // ================= IV CALCULATOR LOGIC =================
+        function calculateIV() {
+            const vol = parseFloat(document.getElementById('ivVol').value);
+            const time = parseFloat(document.getElementById('ivTime').value);
+            const dropFactor = parseFloat(document.getElementById('ivDropFactor').value);
+
+            if (!vol || !time || time <= 0) return;
+
+            const cchr = Math.round(vol / time);
+            const gttMin = Math.round((vol * dropFactor) / (time * 60));
+            const secPerDrop = (60 / gttMin).toFixed(1);
+
+            document.getElementById('resCchr').innerText = `${cchr} cc/hr`;
+            document.getElementById('resGtt').innerText = `${gttMin} gtt/min`;
+            document.getElementById('resDropSec').innerText = `(약 ${secPerDrop}초마다 1방울 점적)`;
+        }
+
+
+        // ================= CORE SKILLS PROCEDURES DATA =================
+        const skillsData = {
+            vent: {
+                title: "인공호흡기(Ventilator) 모니터링 & 기관내 흡인(Suction)",
+                steps: [
+                    "<strong>1. 대상자 확인 및 세밀한 사정:</strong> 2가지 이상 지표로 환자 확인 후 흉부 청진(Wheezing, Rhonchi) 및 SpO2 사정.",
+                    "<strong>2. 기관내 흡인(Suction) 전 준비:</strong> 100% O2를 1~2분간 예비산소화(Pre-oxygenation)하여 흡인 중 저산소증 예방.",
+                    "<strong>3. 멸균 기술 준수:</strong> 흡인 카테터는 무균적으로 삽입하며, 삽입 시에는 음압을 가하지 않음.",
+                    "<strong>4. 흡인 시간 제한:</strong> 1회 흡인 시간은 10~15초 이내로 제한하며, 총 흡인 시간은 5분을 넘지 않도록 함 (근거: 심근 저산소증 및 서맥 방지).",
+                    "<strong>5. 알람 확인:</strong> High-pressure Alarm 발생 시 배액관 꼬임, 환자의 카테터 물음, 분비물 축적(Suction 필요) 여부 점검."
+                ]
+            },
+            cvp: {
+                title: "중심정맥관(CVC) 관리 및 중심정맥압(CVP) 측정",
+                steps: [
+                    "<strong>1. 영점 조절(Zeroing):</strong> 환자를 와위(Supine)로 취하고 측정 기준점(Phlebostatic axis: 4번째 늑간과 흉당 전후경 1/2 교차점)에 수평기를 맞춤.",
+                    "<strong>2. CVP 측정:</strong> CVP 메노미터 또는 변환기(Transducer)를 이용하여 CVP 측정 (정상치: 2 ~ 8 mmHg 또는 5 ~ 10 cmH2O).",
+                    "<strong>3. 수치 해석:</strong> CVP &lt; 2 mmHg (체액 부족 / 하판 저혈류량), CVP &gt; 8 mmHg (우심부전 / 체액 과다).",
+                    "<strong>4. 드레싱 관리:</strong> 투명 드레싱(Tegaderm)은 7일마다, 거어즈 드레싱은 48시간마다 교환하며 무균술 준수."
+                ]
+            },
+            chest: {
+                title: "밀폐흉관유도(Chest Tube Drain) 관리",
+                steps: [
+                    "<strong>1. 배액병 위치 준수:</strong> 배액관은 항상 환자의 흉공 높이보다 낮은 위치(환자 침상 아래)에 유지 (역류 방지).",
+                    "<strong>2. 파동(Fluctuation) 관찰:</strong> 수봉쇄(Water-seal) 병에서 호흡에 따른 물기둥의 파동을 확인 (파동 소실 시 폐가 완전히 확장되었거나 관이 폐쇄됨을 의미).",
+                    "<strong>3. 지속적인 공기 누출 확인:</strong> 수봉쇄 병의 지속적인 기포(Bubbling) 발생은 시스템 내 Air Leak를 의미하므로 연결부 확인.",
+                    "<strong>4. 응급 상황 대처:</strong> 흉관이 분리된 경우 즉시 멸균 생리식염수 병에 관 끝을 담그고, 흉관이 탈출된 경우 즉시 바세린 거즈로 즉각 밀봉."
+                ]
+            },
+            trans: {
+                title: "수혈 간호 (Blood Transfusion Protocol)",
+                steps: [
+                    "<strong>1. 이중 확인(Double Check):</strong> 2인의 간호사가 환자 이름, 등록번호, 혈액형(ABO/Rh), 혈액번호, 유효기간을 직접 대조.",
+                    "<strong>2. 수혈 전 활력징후:</strong> 수혈 직전 V/S 측정 (체온 상승 여부 확인).",
+                    "<strong>3. 주입 속도 및 상호작용:</strong> 수혈 시작 첫 15분간은 15gtt/min 이하로 천천히 주입하며 환자 상태 직접 관찰 (부작용은 주로 시작 15분 내 발생).",
+                    "<strong>4. 전용 수액 사용:</strong> 수혈 세트에는 오직 0.9% Normal Saline만 혼합 가능 (하트만액이나 D5W는 혈구 용혈/응집 유발).",
+                    "<strong>5. 부작용 대처:</strong> 발열, 오한, 호흡곤란 발생 시 즉시 수혈 중단 -> Normal Saline으로 라인 유지 -> 의사 보고."
+                ]
+            }
+        };
+
+        function selectSkill(key) {
+            const skill = skillsData[key];
+            document.getElementById('skillDetailTitle').innerText = skill.title;
+            
+            let stepsHtml = "";
+            skill.steps.forEach(step => {
+                stepsHtml += `<div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">${step}</div>`;
+            });
+            document.getElementById('skillSteps').innerHTML = stepsHtml;
+
+            // Highlight buttons
+            ['vent', 'cvp', 'chest', 'trans'].forEach(k => {
+                const btn = document.getElementById(`skillBtn-${k}`);
+                if (k === key) {
+                    btn.className = "w-full text-left p-3 rounded-lg border text-xs font-bold transition flex items-center justify-between bg-teal-50 border-teal-500 text-teal-800";
+                } else {
+                    btn.className = "w-full text-left p-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center justify-between";
+                }
+            });
+        }
+
+
+        // ================= NATIONAL BOARD QUIZ DATA =================
+        const quizData = [
+            {
+                id: 1,
+                question: "급성 심근경색증(AMI)으로 입원한 환자에게 Morphine sulfate를 정맥 주사하고자 한다. 간호사가 Morphine 투여 직전 반드시 사정해야 하는 최우선 지표는 무엇인가?",
+                options: [
+                    "1. 체온 (Body Temperature)",
+                    "2. 호흡수 (Respiratory Rate)",
+                    "3. 심첨맥박 (Apical Pulse)",
+                    "4. 소변량 (Urine Output)"
+                ],
+                correct: 1, // index 1 = Respiratory Rate
+                rationale: "Morphine은 강력한 중추신경계 마약성 진통제로 중추성 호흡 억제(Respiratory Depression) 부작용이 있습니다. 따라서 투여 전 호흡수가 12회/분 이하인 경우 투약을 보류하고 의사에게 보고해야 합니다."
+            },
+            {
+                id: 2,
+                question: "울혈성 심부전(Congestive Heart Failure) 환자에게 Furosemide(라식스)를 장기 투여 중이다. 이 환자의 혈액검사 결과 중 간호사가 가장 주의 깊게 모니터링해야 하는 전해질 불균형은?",
+                options: [
+                    "1. 고칼슘혈증 (Hypercalcemia)",
+                    "2. 저칼륨혈증 (Hypokalemia)",
+                    "3. 고나트륨혈증 (Hypernatremia)",
+                    "4. 저마그네슘혈증 (Hypomagnesemia)"
+                ],
+                correct: 1, // Hypokalemia
+                rationale: "Furosemide는 루프 이뇨제(Loop diuretics)로 헨레 고리에서 나트륨과 물뿐만 아니라 칼륨(K+) 배설을 촉진합니다. 이로 인한 저칼륨혈증은 심각한 치사성 부정맥 및 Digoxin 중독 유발 요인이 됩니다."
+            },
+            {
+                id: 3,
+                question: "급성 뇌졸중(Stroke) 환자의 뇌압 상승(IICP)을 예방하기 위한 간호중재로 올바른 것은?",
+                options: [
+                    "1. 침대 머리를 30° 정도 상승시킨다.",
+                    "2. 경경맥 환류를 억제하기 위해 경부를 측면으로 굴곡시킨다.",
+                    "3. 배변 시 힘을 많이 주도록 권장한다 (Valsalva maneuver).",
+                    "4. 자극을 위해 조명을 밝게 유지하고 자주 흡인(Suction)한다."
+                ],
+                correct: 0,
+                rationale: "침골 머리를 30° 상승시키면 정맥 환류가 촉진되어 뇌압(ICP) 감소에 도움이 됩니다. 목의 과도한 굴곡, 발살바 호흡법, 빈번한 흡인은 모두 뇌압을 급격히 상승시키므로 금기됩니다."
+            }
+        ];
+
+        let userQuizScores = {};
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            let html = "";
+
+            quizData.forEach((q, idx) => {
+                html += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span class="w-7 h-7 bg-teal-600 text-white font-bold rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">${q.id}</span>
+                            <p class="font-bold text-sm text-slate-800 leading-relaxed">${q.question}</p>
+                        </div>
+
+                        <div class="space-y-2 pl-10 text-xs">
+                            ${q.options.map((opt, optIdx) => `
+                                <label class="block p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition flex items-center space-x-2">
+                                    <input type="radio" name="quiz-${q.id}" value="${optIdx}" onclick="checkAnswer(${q.id}, ${optIdx})" class="text-teal-600 focus:ring-teal-500">
+                                    <span class="text-slate-700">${opt}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+
+                        <div id="quizResult-${q.id}" class="hidden pl-10 text-xs">
+                            <!-- Feedback dynamically inserted -->
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function checkAnswer(qId, selectedIdx) {
+            const q = quizData.find(item => item.id === qId);
+            const resDiv = document.getElementById(`quizResult-${qId}`);
+            resDiv.classList.remove('hidden');
+
+            if (selectedIdx === q.correct) {
+                userQuizScores[qId] = 1;
+                resDiv.innerHTML = `
+                    <div class="p-3 bg-emerald-50 border border-emerald-300 rounded-lg text-emerald-800 space-y-1">
+                        <p class="font-bold"><i class="fa-solid fa-circle-check"></i> 정답입니다!</p>
+                        <p class="text-slate-600 font-normal leading-relaxed"><strong>EBP 근거해설:</strong> ${q.rationale}</p>
+                    </div>
+                `;
+            } else {
+                userQuizScores[qId] = 0;
+                resDiv.innerHTML = `
+                    <div class="p-3 bg-rose-50 border border-rose-300 rounded-lg text-rose-800 space-y-1">
+                        <p class="font-bold"><i class="fa-solid fa-circle-xmark"></i> 오답입니다.</p>
+                        <p class="text-slate-600 font-normal leading-relaxed"><strong>EBP 근거해설:</strong> ${q.rationale}</p>
+                    </div>
+                `;
+            }
+
+            // Update Total Score
+            const currentTotal = Object.values(userQuizScores).reduce((a, b) => a + b, 0);
+            document.getElementById('quizScoreText').innerText = `${currentTotal} / ${quizData.length}`;
+        }
+
+
+        // ================= ON LOAD INITIALIZATION =================
+        window.onload = function() {
+            // Initialize Default Case & Skills
+            loadCase(1);
+            selectSkill('vent');
+            analyzeABG();
+            calculateIV();
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
